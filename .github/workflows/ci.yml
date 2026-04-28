@@ -1,5 +1,8 @@
 name: CI — tablio-api
 
+permissions:
+  contents: read
+  pull-requests: read
 on:
   push:
     branches: [main, develop]
