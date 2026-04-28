@@ -6,7 +6,10 @@ from app.core.config import settings
 
 app = FastAPI(
     title="Tablio API",
-    description="Backend de Tablio — menú digital y pedidos para negocios gastronómicos en Latam.",
+    description=(
+        "Backend de Tablio — menú digital y pedidos para "
+        "negocios gastronómicos en Latam."
+    ),
     version="0.1.0",
     docs_url="/docs" if settings.DEBUG else None,
     redoc_url="/redoc" if settings.DEBUG else None,
