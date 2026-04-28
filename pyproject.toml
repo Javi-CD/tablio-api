@@ -45,6 +45,8 @@ indent-style = "space"
 python_version = "3.12"
 strict = true
 ignore_missing_imports = true
+explicit_package_bases = true
+plugins = ["pydantic.mypy"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
