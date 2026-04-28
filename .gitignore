@@ -1,0 +1,45 @@
+# IMPORTANT: Keep this file alphanumerically sorted for future contributions.
+# uv.lock is committed intentionally, not ignored.
+# Alembic migrations in alembic/versions/ are versioned, only auto-generated files outside versions/ are ignored.
+
+!.env.example
+*.egg
+*.egg-info/
+*.env.docker
+*.log
+*.py[cod]
+*.pyd
+*.pyo
+*.so
+*.swo
+*.swp
+*$py.class
+.DS_Store
+.coverage
+.env
+.env.*.local
+.env.local
+.idea/
+.installed.cfg
+.mypy_cache/
+.pytest_cache/
+.python-version
+.ruff_cache/
+.sentryclirc
+.venv/
+.vscode/
+Thumbs.db
+__pycache__/
+build/
+coverage.xml
+develop-eggs/
+dist/
+eggs/
+htmlcov/
+lib/
+lib64/
+logs/
+parts/
+sdist/
+var/
+venv/
