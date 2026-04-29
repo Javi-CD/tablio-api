@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.api.routes import auth, health, restaurants
+from app.api.routes import auth, health
 from app.core.config import settings
 from app.core.limiter import limiter
 
@@ -31,4 +31,4 @@ app.add_middleware(
 
 app.include_router(health.router, prefix=settings.API_V1_PREFIX)
 app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
-app.include_router(restaurants.router, prefix=settings.API_V1_PREFIX)
+# app.include_router(restaurants.router, prefix=settings.API_V1_PREFIX)
