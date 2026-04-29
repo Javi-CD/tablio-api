@@ -63,13 +63,13 @@ jobs:
       - name: Apply migrations
         run: uv run alembic upgrade head
         env:
-          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/tablio_test
+          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/tablio_test
           SECRET_KEY: ci-not-secure-key
 
       - name: Execute tests with coverage
         run: uv run pytest
         env:
-          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/tablio_test
+          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/tablio_test
           SECRET_KEY: test-secret-key-for-ci-only
 
   commit-lint:
