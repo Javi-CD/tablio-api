@@ -78,9 +78,7 @@ class ProductService:
         await self._assert_ownership(product.restaurant_id, owner_id)
 
         if data.category_id is not None:
-            await self._assert_category_belongs(
-                data.category_id, product.restaurant_id
-            )
+            await self._assert_category_belongs(data.category_id, product.restaurant_id)
 
         fields = dict(data.model_dump(exclude_unset=True))
         if not fields:

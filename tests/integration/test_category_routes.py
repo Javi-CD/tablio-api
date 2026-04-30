@@ -91,9 +91,7 @@ class TestListCategories:
         assert resp.status_code == 200
         assert len(resp.json()) == 3
 
-    async def test_list_includes_inactive_categories(
-        self, client: AsyncClient
-    ) -> None:
+    async def test_list_includes_inactive_categories(self, client: AsyncClient) -> None:
         token, _ = await _register_and_login(client)
         restaurant_id = await _create_restaurant(client, token)
         create_resp = await client.post(

@@ -32,9 +32,7 @@ class ProductRepository:
         return list(result.scalars().all())
 
     async def get_by_id(self, product_id: uuid.UUID) -> Product | None:
-        result = await self._db.execute(
-            select(Product).where(Product.id == product_id)
-        )
+        result = await self._db.execute(select(Product).where(Product.id == product_id))
         return result.scalar_one_or_none()
 
     async def create(
