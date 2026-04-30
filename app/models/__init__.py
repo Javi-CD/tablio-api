@@ -1,5 +1,7 @@
 # Import all models here so Alembic autogenerate can detect schema changes.
+from app.models.category import Category
+from app.models.product import Product
 from app.models.restaurant import Restaurant
 from app.models.user import User
 
-__all__ = ["Restaurant", "User"]
+__all__ = ["Category", "Product", "Restaurant", "User"]
