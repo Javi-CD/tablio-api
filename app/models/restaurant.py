@@ -11,6 +11,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
 if TYPE_CHECKING:
+    from app.models.category import Category
+    from app.models.product import Product
     from app.models.user import User
 
 
@@ -47,3 +49,9 @@ class Restaurant(Base):
     )
 
     owner: Mapped[User] = relationship("User", back_populates="restaurants")
+    categories: Mapped[list[Category]] = relationship(
+        "Category", back_populates="restaurant", lazy="select"
+    )
+    products: Mapped[list[Product]] = relationship(
+        "Product", back_populates="restaurant", lazy="select"
+    )
