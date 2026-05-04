@@ -1,41 +1,37 @@
-from uuid import UUID
+import uuid
+from decimal import Decimal
 
 from pydantic import BaseModel
 
 
 class PublicProductResponse(BaseModel):
-    id: UUID
-    name: str
-    description: str | None = None
-    price: str
-    image_url: str | None = None
+    model_config = {"from_attributes": True}
 
-    class Config:
-        from_attributes = True
+    id: uuid.UUID
+    name: str
+    description: str | None
+    price: Decimal
+    image_url: str | None
 
 
 class PublicCategoryResponse(BaseModel):
-    id: UUID
+    id: uuid.UUID
     name: str
-    description: str | None = None
+    description: str | None
     sort_order: int
-    products: list[PublicProductResponse] = []
-
-    class Config:
-        from_attributes = True
+    products: list[PublicProductResponse]
 
 
 class PublicRestaurantResponse(BaseModel):
-    id: UUID
+    model_config = {"from_attributes": True}
+
+    id: uuid.UUID
     name: str
     slug: str
-    description: str | None = None
-    logo_url: str | None = None
-    phone: str | None = None
-    address: str | None = None
-
-    class Config:
-        from_attributes = True
+    description: str | None
+    logo_url: str | None
+    phone: str | None
+    address: str | None
 
 
 class PublicMenuResponse(BaseModel):

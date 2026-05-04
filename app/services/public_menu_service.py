@@ -1,3 +1,5 @@
+import uuid
+
 from app.core.exceptions import NotFoundError
 from app.repositories.public_menu_repository import PublicMenuRepository
 from app.schemas.public_menu import (
@@ -9,53 +11,42 @@ from app.schemas.public_menu import (
 
 
 class PublicMenuService:
-    def __init__(self, repository: PublicMenuRepository):
-        self._repo = repository
+    def __init__(self, repo: PublicMenuRepository) -> None:
+        self._repo = repo
 
     async def get_menu(self, slug: str) -> PublicMenuResponse:
         restaurant = await self._repo.get_restaurant_by_slug(slug)
-        if not restaurant:
-            raise NotFoundError("Restaurant not found or inactive.")
+        if restaurant is None:
+            raise NotFoundError(f"Restaurant with slug '{slug}' not found.")
 
         categories = await self._repo.get_active_categories(restaurant.id)
         products = await self._repo.get_available_products(restaurant.id)
 
-        # Group products by category_id
-        products_by_cat = {}
-        for p in products:
-            if p.category_id not in products_by_cat:
-                products_by_cat[p.category_id] = []
-            products_by_cat[p.category_id].append(
-                PublicProductResponse(
-                    id=p.id,
-                    name=p.name,
-                    description=p.description,
-                    price=str(p.price),
-                    image_url=p.image_url,
-                )
-            )
+        products_by_category: dict[uuid.UUID, list[PublicProductResponse]] = {}
+        for product in products:
+            if product.category_id is None:
+                continue
+            bucket = products_by_category.setdefault(product.category_id, [])
+            bucket.append(PublicProductResponse.model_validate(product))
 
-        # Build category responses with nested products
-        category_responses = []
-        for cat in categories:
-            cat_products = products_by_cat.get(cat.id, [])
-            category_responses.append(
-                PublicCategoryResponse(
-                    id=cat.id,
-                    name=cat.name,
-                    description=cat.description,
-                    sort_order=cat.sort_order,
-                    products=cat_products,
-                )
+        menu_categories = [
+            PublicCategoryResponse(
+                id=cat.id,
+                name=cat.name,
+                description=cat.description,
+                sort_order=cat.sort_order,
+                products=products_by_category.get(cat.id, []),
             )
+            for cat in categories
+        ]
 
         return PublicMenuResponse(
-            restaurant=PublicRestaurantResponse.from_orm(restaurant),
-            categories=category_responses,
+            restaurant=PublicRestaurantResponse.model_validate(restaurant),
+            categories=menu_categories,
         )
 
     async def get_restaurant(self, slug: str) -> PublicRestaurantResponse:
         restaurant = await self._repo.get_restaurant_by_slug(slug)
-        if not restaurant:
-            raise NotFoundError("Restaurant not found or inactive.")
-        return PublicRestaurantResponse.from_orm(restaurant)
+        if restaurant is None:
+            raise NotFoundError(f"Restaurant with slug '{slug}' not found.")
+        return PublicRestaurantResponse.model_validate(restaurant)
