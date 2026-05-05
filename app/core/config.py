@@ -28,5 +28,14 @@ class Settings(BaseSettings):
     # API
     API_V1_PREFIX: str = "/api/v1"
 
+    # Observability
+    SENTRY_DSN: str | None = None
+    LOG_LEVEL: str = "INFO"
+
+    # Seed Data
+    DEMO_EMAIL: str = "demo@tablio.co"
+    DEMO_PASSWORD: str = "demo1234"
+    DEMO_SLUG: str = "demo"
+
 
 settings = Settings()
