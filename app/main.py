@@ -1,3 +1,6 @@
+import sentry_sdk
+import sentry_sdk.integrations.fastapi
+import sentry_sdk.integrations.sqlalchemy
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
@@ -15,6 +18,23 @@ from app.api.routes import (
 )
 from app.core.config import settings
 from app.core.limiter import limiter
+from app.core.logging import configure_logging, request_logging_middleware
+
+# Configure structured JSON logging before anything else.
+configure_logging()
+
+# Initialize Sentry when a DSN is provided (production / staging).
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        environment=settings.ENVIRONMENT,
+        integrations=[
+            sentry_sdk.integrations.fastapi.FastApiIntegration(),
+            sentry_sdk.integrations.sqlalchemy.SqlalchemyIntegration(),
+        ],
+        traces_sample_rate=0.2,
+        send_default_pii=False,
+    )
 
 app = FastAPI(
     title="Tablio API",
@@ -37,6 +57,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.middleware("http")(request_logging_middleware)
 
 app.include_router(health.router, prefix=settings.API_V1_PREFIX)
 app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
