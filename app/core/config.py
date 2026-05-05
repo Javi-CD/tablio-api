@@ -34,7 +34,7 @@ class Settings(BaseSettings):
 
     # Seed Data
     DEMO_EMAIL: str = "demo@tablio.co"
-    DEMO_PASSWORD: str = "demo1234"
+    DEMO_PASSWORD: str = "demo1234"  # noqa: S105
     DEMO_SLUG: str = "demo"
 
 
