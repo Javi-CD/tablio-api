@@ -1,10 +1,21 @@
 from dataclasses import dataclass
 
+DEFAULT_LIMIT = 20
+MAX_LIMIT = 100
+
 
 @dataclass
 class PaginationParams:
     page: int = 1
-    limit: int = 20
+    limit: int = DEFAULT_LIMIT
+
+    def __post_init__(self) -> None:
+        if self.page < 1:
+            self.page = 1
+        if self.limit < 1:
+            self.limit = 1
+        if self.limit > MAX_LIMIT:
+            self.limit = MAX_LIMIT
 
     def offset(self) -> int:
         return (self.page - 1) * self.limit
